@@ -26,9 +26,14 @@ jobs:
           path: .env-rcnet
           contents: "POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}"
           write-mode: append
-      - name: Generate and upload postman collection
-        run: |
-          npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
+      - name: Generate collection for localnet
+        run: npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
           -b https://rcnet.radixdlt.com
+      - name: Generate collection for rcnet
+        run: npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
       - name: Validate collection w/ newman
         run: newman run /tmp/collection.postman.json
+      - name: Update OpenAPI in postman
+        run: pwd
+      - name: Organize collection in folders
+        run: pwd
