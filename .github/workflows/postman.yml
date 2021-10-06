@@ -29,10 +29,12 @@ jobs:
       - name: test
         run: cat .env-rcnet
       - name: Generate collection for localnet
-        run: npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
-          -b https://rcnet.radixdlt.com
+        run: |
+          npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
       - name: Generate collection for rcnet
-        run: npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
+        run: |
+          npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true \
+          -b https://rcnet.radixdlt.com
       - name: Validate collection w/ newman
         run: newman run /tmp/collection.postman.json
       - name: Update OpenAPI in postman
