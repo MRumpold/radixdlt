@@ -20,10 +20,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: Theoklitos/openapi-spec
-      - name: Setup credentials
+      - name: Setup credentials for localnet
         uses: DamianReeves/write-file-action@v1.0
         with:
-          path: .env-rcnet
+          path: .env-local
           contents: POSTMAN_API_KEY=${{secrets.POSTMAN_API_TOKEN}}
           write-mode: append
       - name: test1
