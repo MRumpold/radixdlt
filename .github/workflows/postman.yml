@@ -32,6 +32,9 @@ jobs:
           path: .env-rcnet
           contents: POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}
           write-mode: append
+      - name: cat
+        run: |
+          cat .env-rcnet
       - name: Generate localnet collection
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
