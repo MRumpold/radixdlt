@@ -24,7 +24,7 @@ jobs:
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: .env-rcnet
-          contents: POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}
+          contents: POSTMAN_API_KEY=${{secrets.POSTMAN_API_TOKEN}}
           write-mode: append
       - name: test1
         run: cat .env-rcnet
