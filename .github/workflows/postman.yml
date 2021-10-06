@@ -12,7 +12,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
   generate:
-    name: Sync postman collection
+    name: Sync postman collections
     environment: Postman
     runs-on: ubuntu-20.04
     steps:
@@ -36,7 +36,7 @@ jobs:
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
       - name: rename openapi spec name
-        run: sed -i 's/(local)/(rcnet)' openapi-spec.json
+        run: sed -i 's/(local)/(rcnet)/' openapi-spec.json
       - name: Generate rcnet collection
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
