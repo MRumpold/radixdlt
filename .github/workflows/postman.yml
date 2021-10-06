@@ -24,10 +24,12 @@ jobs:
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: .env-rcnet
-          contents: "null"
+          contents: POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}
           write-mode: append
-      - name: test
+      - name: test1
         run: cat .env-rcnet
+      - name: test2
+        run: cat .env-local
       - name: Generate collection for localnet
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
@@ -37,7 +39,3 @@ jobs:
           -b https://rcnet.radixdlt.com
       - name: Validate collection w/ newman
         run: newman run /tmp/collection.postman.json
-      - name: Update OpenAPI in postman
-        run: pwd
-      - name: Organize collection in folders
-        run: pwd
