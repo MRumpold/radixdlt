@@ -35,6 +35,9 @@ jobs:
       - name: cat
         run: |
           cat .env-rcnet
+      - name: cat2
+        run: |
+          cat .env-local
       - name: Generate localnet collection
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
