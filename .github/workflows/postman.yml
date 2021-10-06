@@ -20,22 +20,26 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: Theoklitos/openapi-spec
-      - name: Setup credentials for localnet
+      - name: Setup localnet credentials
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: .env-local
-          contents: POSTMAN_API_KEY=${{secrets.POSTMAN_API_TOKEN}}
+          contents: POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}
           write-mode: append
-      - name: test1
-        run: cat .env-rcnet
-      - name: test2
-        run: cat .env-local
-      - name: Generate collection for localnet
+      - name: Setup rcnet credentials
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: .env-rcnet
+          contents: POSTMAN_API_KEY=${{ secrets.POSTMAN_API_TOKEN }}
+          write-mode: append
+      - name: Generate localnet collection
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
-      - name: Generate collection for rcnet
+      - name: rename openapi spec name
+        run: sed -i 's/(local)/(rcnet)' openapi-spec.json
+      - name: Generate rcnet collection
         run: |
-          npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true \
+          npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
           -b https://rcnet.radixdlt.com
       - name: Validate collection w/ newman
         run: newman run /tmp/collection.postman.json
