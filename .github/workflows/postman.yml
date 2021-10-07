@@ -32,8 +32,6 @@ jobs:
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-rcnet --syncPostman true \
             -b https://rcnet.radixdlt.com
-      - name: Validate rcnet collection w/ newman
-        run: newman run /tmp/collection.postman.json
       - name: Setup localnet credentials
         uses: DamianReeves/write-file-action@v1.0
         with:
@@ -45,3 +43,5 @@ jobs:
       - name: Generate localnet collection
         run: |
           npx @apideck/portman -l openapi-spec.json -o /tmp/collection.postman.json --envFile .env-local --syncPostman true
+      - name: Validate rcnet collection w/ newman
+        run: newman run /tmp/collection.postman.json
