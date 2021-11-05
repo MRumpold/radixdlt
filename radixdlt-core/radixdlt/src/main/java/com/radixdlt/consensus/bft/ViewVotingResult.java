@@ -72,7 +72,7 @@ import java.util.Objects;
 /**
  * The result of a view voting (either QC or TC).
  */
-public interface ViewVotingResult {
+public sealed interface ViewVotingResult {
 
     static FormedQC qc(QuorumCertificate qc) {
         return new FormedQC(qc);

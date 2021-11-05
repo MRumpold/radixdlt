@@ -237,20 +237,16 @@ public final class BFTSync implements BFTSyncer {
 		return viewQuorumReached -> {
 			this.runOnThreads.add(Thread.currentThread().getName());
 
-			final HighQC highQC;
-			if (viewQuorumReached.votingResult() instanceof FormedQC) {
-				highQC = HighQC.from(
-						((FormedQC) viewQuorumReached.votingResult()).getQC(),
-						this.vertexStore.highQC().highestCommittedQC(),
-						this.vertexStore.getHighestTimeoutCertificate());
-			} else if (viewQuorumReached.votingResult() instanceof FormedTC) {
-				highQC = HighQC.from(
-						this.vertexStore.highQC().highestQC(),
-						this.vertexStore.highQC().highestCommittedQC(),
-						Optional.of(((FormedTC) viewQuorumReached.votingResult()).getTC()));
-			} else {
-				throw new IllegalArgumentException("Unknown voting result: " + viewQuorumReached.votingResult());
-			}
+			final var highQC = switch (viewQuorumReached.votingResult()) {
+				case FormedQC formedQc -> HighQC.from(
+					((FormedQC) viewQuorumReached.votingResult()).getQC(),
+					this.vertexStore.highQC().highestCommittedQC(),
+					this.vertexStore.getHighestTimeoutCertificate());
+				case FormedTC formedTc -> HighQC.from(
+					this.vertexStore.highQC().highestQC(),
+					this.vertexStore.highQC().highestCommittedQC(),
+					Optional.of(((FormedTC) viewQuorumReached.votingResult()).getTC()));
+			};
 
 			syncToQC(highQC, viewQuorumReached.lastAuthor());
 		};
